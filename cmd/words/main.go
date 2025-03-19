@@ -6,8 +6,8 @@ import (
 )
 
 func main() {
-	app := app.NewApp()
-	if err := app.Run(); err != nil {
+	newApp := app.NewApp()
+	if err := newApp.Run(); err != nil {
 		fmt.Println("Error:", err)
 	}
 }

@@ -59,9 +59,19 @@ func (s *TrainerService) generateOptions(words []domain.Word, correctIndex int) 
 	options := make([]domain.Word, 4)
 	options[0] = words[correctIndex]
 
+	usedIndices := make(map[int]bool)
+	usedIndices[correctIndex] = true
+
 	for i := 1; i < 4; i++ {
-		randomIndex := rand.Intn(len(words))
+		var randomIndex int
+		for {
+			randomIndex = rand.Intn(len(words))
+			if !usedIndices[randomIndex] {
+				break
+			}
+		}
 		options[i] = words[randomIndex]
+		usedIndices[randomIndex] = true
 	}
 
 	rand.Shuffle(len(options), func(i, j int) {
