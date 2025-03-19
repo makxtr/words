@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"math/rand"
 	"words/internal/domain"
-	"words/internal/repository"
 )
 
 type TrainerService struct {
-	repo *repository.CSVRepository
+	repo domain.WordRepository
 }
 
-func NewTrainerService(repo *repository.CSVRepository) *TrainerService {
+func NewTrainerService(repo domain.WordRepository) *TrainerService {
 	return &TrainerService{
 		repo: repo,
 	}
