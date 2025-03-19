@@ -6,7 +6,12 @@ import (
 )
 
 func main() {
-	newApp := app.NewApp()
+	newApp, err := app.NewApp()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	if err := newApp.Run(); err != nil {
 		fmt.Println("Error:", err)
 	}

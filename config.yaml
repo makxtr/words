@@ -1,0 +1,2 @@
+app:
+  csv_path: "data/words.csv"
