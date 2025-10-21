@@ -29,7 +29,7 @@ func (r *CSVRepository) GetAllWords() ([]domain.Word, error) {
 		return nil, err
 	}
 
-	var words []domain.Word
+	words := make([]domain.Word, 0, len(records))
 	for _, record := range records {
 		words = append(words, domain.Word{
 			Original:    record[0],

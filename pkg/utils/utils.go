@@ -1,10 +1,20 @@
 package utils
 
 import (
-	"math/rand"
-	"time"
+	"os"
+	"os/exec"
+	"runtime"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
+func ClearScreen() {
+	var cmd *exec.Cmd
+
+	if "windows" == runtime.GOOS {
+		cmd = exec.Command("cmd", "/c", "cls")
+	} else {
+		cmd = exec.Command("clear")
+	}
+
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }

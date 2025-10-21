@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"words/internal/domain"
+	"words/pkg/utils"
 )
 
 type TrainerService struct {
@@ -30,25 +31,29 @@ func (s *TrainerService) StartTraining() error {
 	totalWords := len(words)
 
 	for i, word := range words {
-		fmt.Printf("%s\n", word.Original)
+		utils.ClearScreen()
+		fmt.Printf("Word %d of %d\n\n", i+1, totalWords)
+		fmt.Printf("%s\n\n", word.Original)
 		options := s.generateOptions(words, i)
 		for j, option := range options {
 			fmt.Printf("%d. %s\n", j+1, option.Translation)
 		}
 
 		var answer int
-		fmt.Print("Выберите правильный вариант: ")
+		fmt.Print("Choose the correct answer: ")
 		fmt.Scan(&answer)
 
 		if options[answer-1].Translation == word.Translation {
 			correctAnswers++
-			fmt.Println("Правильно!")
+			fmt.Println("\n✓ Right!")
 		} else {
-			fmt.Println("Неправильно!")
+			fmt.Printf("\n✗ Wrong! Correct answer: %s\n", word.Translation)
 		}
 
 		progress := float64(correctAnswers) / float64(totalWords) * 100
-		fmt.Printf("Прогресс: %.2f%%\n", progress)
+		fmt.Printf("Progress: %d/%d (%.2f%%)\n", correctAnswers, totalWords, progress)
+		fmt.Println("\nPress Enter to continue...")
+		fmt.Scanln()
 	}
 
 	return nil
