@@ -2,6 +2,7 @@ package repository
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 	"words/internal/domain"
 )
@@ -24,9 +25,10 @@ func (r *CSVRepository) GetAllWords() ([]domain.Word, error) {
 	defer file.Close()
 
 	reader := csv.NewReader(file)
+	reader.FieldsPerRecord = 2
 	records, err := reader.ReadAll()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("invalid CSV format: %w", err)
 	}
 
 	words := make([]domain.Word, 0, len(records))

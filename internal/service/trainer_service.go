@@ -39,9 +39,8 @@ func (s *TrainerService) StartTraining() error {
 			fmt.Printf("%d. %s\n", j+1, option.Translation)
 		}
 
-		var answer int
-		fmt.Print("Choose the correct answer: ")
-		fmt.Scan(&answer)
+		fmt.Print("Choose the correct answer (1-4): ")
+		answer := utils.ReadIntAnswer(1, 4)
 
 		if options[answer-1].Translation == word.Translation {
 			correctAnswers++
@@ -53,7 +52,7 @@ func (s *TrainerService) StartTraining() error {
 		progress := float64(correctAnswers) / float64(totalWords) * 100
 		fmt.Printf("Progress: %d/%d (%.2f%%)\n", correctAnswers, totalWords, progress)
 		fmt.Println("\nPress Enter to continue...")
-		fmt.Scanln()
+		_, _ = fmt.Scanln()
 	}
 
 	return nil
