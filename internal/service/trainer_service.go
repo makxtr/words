@@ -7,6 +7,11 @@ import (
 	"words/pkg/utils"
 )
 
+const (
+	OptionsCount = 4
+	MinOption    = 1
+)
+
 type TrainerService struct {
 	repo domain.WordRepository
 }
@@ -39,8 +44,8 @@ func (s *TrainerService) StartTraining() error {
 			fmt.Printf("%d. %s\n", j+1, option.Translation)
 		}
 
-		fmt.Print("Choose the correct answer (1-4): ")
-		answer := utils.ReadIntAnswer(1, 4)
+		fmt.Printf("Choose the correct answer (%d-%d): ", MinOption, OptionsCount)
+		answer := utils.ReadIntAnswer(MinOption, OptionsCount)
 
 		if options[answer-1].Translation == word.Translation {
 			correctAnswers++
@@ -59,13 +64,13 @@ func (s *TrainerService) StartTraining() error {
 }
 
 func (s *TrainerService) generateOptions(words []domain.Word, correctIndex int) []domain.Word {
-	options := make([]domain.Word, 4)
+	options := make([]domain.Word, OptionsCount)
 	options[0] = words[correctIndex]
 
 	usedIndices := make(map[int]bool)
 	usedIndices[correctIndex] = true
 
-	for i := 1; i < 4; i++ {
+	for i := 1; i < OptionsCount; i++ {
 		var randomIndex int
 		for {
 			randomIndex = rand.Intn(len(words))

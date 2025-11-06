@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+
 	"github.com/spf13/viper"
 )
 
@@ -11,7 +12,7 @@ func InitConfig() error {
 	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
-		return fmt.Errorf("ошибка чтения конфига: %w", err)
+		return fmt.Errorf("error reading config: %w", err)
 	}
 
 	return nil
