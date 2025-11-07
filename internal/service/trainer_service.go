@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"words/internal/domain"
@@ -39,7 +40,10 @@ func (s *TrainerService) StartTraining() error {
 		utils.ClearScreen()
 		fmt.Printf("Word %d of %d\n\n", i+1, totalWords)
 		fmt.Printf("%s\n\n", word.Original)
-		options := s.generateOptions(words, i)
+		options, err := s.generateOptions(words, i)
+		if err != nil {
+			return fmt.Errorf("failed to generate options: %w", err)
+		}
 		for j, option := range options {
 			fmt.Printf("%d. %s\n", j+1, option.Translation)
 		}
@@ -63,7 +67,11 @@ func (s *TrainerService) StartTraining() error {
 	return nil
 }
 
-func (s *TrainerService) generateOptions(words []domain.Word, correctIndex int) []domain.Word {
+func (s *TrainerService) generateOptions(words []domain.Word, correctIndex int) ([]domain.Word, error) {
+	if len(words) < OptionsCount {
+		return nil, errors.New("not enough words")
+	}
+
 	options := make([]domain.Word, OptionsCount)
 	options[0] = words[correctIndex]
 
@@ -86,5 +94,5 @@ func (s *TrainerService) generateOptions(words []domain.Word, correctIndex int) 
 		options[i], options[j] = options[j], options[i]
 	})
 
-	return options
+	return options, nil
 }

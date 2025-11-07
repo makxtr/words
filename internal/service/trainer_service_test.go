@@ -72,7 +72,10 @@ func TestTrainerService_generateOptions(t *testing.T) {
 			repo := &mockRepository{words: tt.words}
 			service := NewTrainerService(repo)
 
-			options := service.generateOptions(tt.words, tt.correctIndex)
+			options, err := service.generateOptions(tt.words, tt.correctIndex)
+			if err != nil {
+				t.Fatalf("generateOptions() returned error: %v", err)
+			}
 
 			if len(options) != tt.wantOptions {
 				t.Errorf("generateOptions() returned %d options, want %d", len(options), tt.wantOptions)
@@ -110,14 +113,15 @@ func TestTrainerService_generateOptions_NotEnoughWords(t *testing.T) {
 	}
 
 	repo := &mockRepository{words: words}
-	_ = NewTrainerService(repo)
+	service := NewTrainerService(repo)
 
-	defer func() {
-		if r := recover(); r != nil {
-			t.Log("Caught panic (expected due to insufficient words):", r)
-		}
-	}()
+	_, err := service.generateOptions(words, 0)
+	if err == nil {
+		t.Fatal("generateOptions() should return error when not enough words")
+	}
 
-	// TODO: fix minimum word count validation
-	t.Skip("Skipping test that would cause infinite loop - bug needs to be fixed first")
+	expectedError := "not enough words"
+	if err.Error() != expectedError {
+		t.Errorf("generateOptions() error = %v, want %v", err.Error(), expectedError)
+	}
 }
